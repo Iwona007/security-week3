@@ -1,9 +1,6 @@
 package pl.iwona.securityweek3.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class VerificationToken {
@@ -13,7 +10,22 @@ public class VerificationToken {
 
     private String value;
 
+    @OneToOne
+    private ApiUser apiUser;
+
+    public VerificationToken(ApiUser apiUser, String value) {
+        this.apiUser = apiUser;
+        this.value = value;
+    }
     public VerificationToken() {
+    }
+
+    public ApiUser getApiUser() {
+        return apiUser;
+    }
+
+    public void setApiUser(ApiUser apiUser) {
+        this.apiUser = apiUser;
     }
 
     public Long getId() {

@@ -6,4 +6,5 @@ import pl.iwona.securityweek3.model.VerificationToken;
 
 @Repository
 public interface VerificationTokenRepo extends JpaRepository<VerificationToken, Long> {
+    VerificationToken findByValue(String value);
 }

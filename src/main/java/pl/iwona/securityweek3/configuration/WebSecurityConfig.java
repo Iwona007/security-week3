@@ -34,12 +34,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/admin").hasRole("ADMIN")
                 .antMatchers("/user").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/stranger").permitAll()
+                .antMatchers("/singup").permitAll()
                 .and()
                 .formLogin().loginPage("/login").defaultSuccessUrl("/user").permitAll()
                 .and()
-                .logout()
+                .logout().logoutSuccessUrl("/stranger")
                 .and()
-                .rememberMe().tokenValiditySeconds(86400).rememberMeCookieName("rehresh").rememberMeParameter("remember");
+                .rememberMe().tokenValiditySeconds(86400).rememberMeCookieName("refresh").rememberMeParameter("remember");
     }
 }

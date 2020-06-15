@@ -1,4 +1,4 @@
-package pl.iwona.securityweek3.restcontroller;
+package pl.iwona.securityweek3.controller;
 
 import java.security.Principal;
 import org.springframework.web.bind.annotation.GetMapping;

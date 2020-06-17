@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 public class MailSenderService {
 
     private JavaMailSender javaMailSender;
+
     @Autowired
     public MailSenderService(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
@@ -22,12 +23,18 @@ public class MailSenderService {
     public void sendMail(String to,
                          String subject,
                          String text,
-                         boolean isHtmlContent) throws MessagingException {
+                         boolean isHtmlContent) {
+
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-        mimeMessageHelper.setTo(to);
-        mimeMessageHelper.setSubject(subject);
-        mimeMessageHelper.setText(text, isHtmlContent);
+
+        try {
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+            mimeMessageHelper.setTo(to);
+            mimeMessageHelper.setSubject(subject);
+            mimeMessageHelper.setText(text, isHtmlContent);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
         javaMailSender.send(mimeMessage);
     }
 }

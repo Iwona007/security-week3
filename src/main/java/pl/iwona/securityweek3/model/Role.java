@@ -1,9 +1,15 @@
 package pl.iwona.securityweek3.model;
 
 public enum Role {
-    USER,ADMIN;
+    USER,
+    ADMIN,
+    MODERATOR;
 
-    private String getName() {
-      return  this.name();
+    public String getName() {
+      return this.name();
     }
+
+//public static Role getName(String role) {
+//    return Role.getName(role)[role]
+//    }
 }

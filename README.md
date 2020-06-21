@@ -12,6 +12,6 @@ ją od strony przekazywania błędnych wartości użytkownika – niech będzie 
 
 Jeśli zrobisz podstawową i należysz do ambitnych:
 Stwórz formularz rejestracyjny z całą jego obsługą w ramach którego będzie możliwe zarejestrowanie nowego użytkownika. 
-Zadbaj o to, aby użytkownik zweryfikował swój adres mail. W formularzu logowania daj możliwość wyboru na jak długo na 
+Zadbaj o to, aby użytkownik zweryfikował swój adres mail. W formularzu logowania daj możliwość wyboru na 
 jak długo ma zostać zapamiętana jego sesja – 7 dni / 21 dni / 28 dni. Informacje na temat remember-me przechowuj po 
 stronie bazy danych.

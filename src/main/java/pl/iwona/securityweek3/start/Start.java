@@ -19,11 +19,11 @@ public class Start {
         this.encoder = encoder;
     }
 
-//    @EventListener(ApplicationReadyEvent.class)
-//    public void addAdmin() {
-//        ApiUser moderator = new ApiUser("test222test222@gmail.com",
-//                encoder.encode("admin"),
-//              Role.MODERATOR, true);
-//        apiUserRepository.save(moderator);
-//    }
+    @EventListener(ApplicationReadyEvent.class)
+    public void addAdmin() {
+        ApiUser moderator = new ApiUser("test222test222@gmail.com",
+                encoder.encode("admin"),
+              Role.MODERATOR, true);
+        apiUserRepository.save(moderator);
+    }
 }

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +20,7 @@ public class ApiUser implements UserDetails {
     @Email
     @Column(unique = true)
     private String username;
-
+    @Size(min=8, message = "Hasło mu mieć minimum 8 znaków")
     private String password;
 
     @Enumerated(EnumType.STRING)

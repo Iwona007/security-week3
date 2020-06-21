@@ -9,5 +9,4 @@ import pl.iwona.securityweek3.model.VerificationToken;
 public interface VerificationTokenRepo extends JpaRepository<VerificationToken, Long> {
     VerificationToken findByValue(String value);
     VerificationToken findByApiUser(String username);
-    VerificationToken deleteByis(String username);
 }

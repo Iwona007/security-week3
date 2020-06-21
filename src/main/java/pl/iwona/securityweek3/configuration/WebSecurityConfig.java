@@ -38,17 +38,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/admin").hasRole("ADMIN")
                 .antMatchers("/user").hasAnyRole("USER", "ADMIN")
-//                .antMatchers("/stranger").hasAnyRole("STRANGER","USER", "ADMIN")
                 .antMatchers("/signup").permitAll()
                 .antMatchers("/register").permitAll()
                 .and()
                 .formLogin().loginPage("/login").defaultSuccessUrl("/user").permitAll()
                 .and()
                 .rememberMe().tokenRepository(persistenttokenRepository())
+                .tokenValiditySeconds(86400)
+//                .rememberMeCookieName("refresh").rememberMeParameter("remember")
                 .and()
-                .logout().logoutSuccessUrl("/stranger")
-                .and()
-                .rememberMe().rememberMeCookieName("refresh").rememberMeParameter("remember");
+                .logout().logoutSuccessUrl("/stranger");
     }
 
     @Bean

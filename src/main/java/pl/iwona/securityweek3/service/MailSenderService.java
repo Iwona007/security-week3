@@ -6,9 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import pl.iwona.securityweek3.repository.MailService;
 
 @Service
-public class MailSenderService {
+public class MailSenderService implements MailService {
 
     private JavaMailSender javaMailSender;
 
@@ -20,6 +21,7 @@ public class MailSenderService {
     public MailSenderService() {
     }
 
+    @Override
     public void sendMail(String to,
                          String subject,
                          String text,
@@ -37,4 +39,6 @@ public class MailSenderService {
         }
         javaMailSender.send(mimeMessage);
     }
+
+
 }

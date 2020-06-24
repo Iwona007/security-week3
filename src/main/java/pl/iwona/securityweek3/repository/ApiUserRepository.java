@@ -9,5 +9,5 @@ import pl.iwona.securityweek3.model.Role;
 @Repository
 public interface ApiUserRepository extends JpaRepository<ApiUser, Long> {
    Optional<ApiUser> findAllByUsername(String username);
-    ApiUser findByRole(Role role);
+   Optional<ApiUser> findByUsername(String username);
 }

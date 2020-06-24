@@ -9,7 +9,6 @@ import javax.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 @Entity
 public class ApiUser implements UserDetails {
@@ -20,7 +19,9 @@ public class ApiUser implements UserDetails {
     @Email
     @Column(unique = true)
     private String username;
-    @Size(min=8, message = "Hasło mu mieć minimum 8 znaków")
+
+    @Size(min=10, message = "Password has to have at least 10 chars, " +
+            "1 lowercase, 1 uppercase, and 1 number")
     private String password;
 
     @Enumerated(EnumType.STRING)

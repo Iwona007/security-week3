@@ -1,126 +1,112 @@
 package pl.iwona.securityweek3.service;
 
 import java.util.UUID;
-import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.security.saml2.Saml2RelyingPartyProperties;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.iwona.securityweek3.model.ApiUser;
 import pl.iwona.securityweek3.model.Role;
 import pl.iwona.securityweek3.model.VerificationToken;
 import pl.iwona.securityweek3.repository.ApiUserRepository;
-import pl.iwona.securityweek3.repository.VerificationTokenRepo;
 
 @Service
 public class UserService {
 
+    private static final String MODERATOR = "test222test222mail@gmail.com";
+
     private ApiUserRepository apiUserRepository;
     private PasswordEncoder passwordEncoder;
-    private VerificationTokenRepo verificationTokenRepo;
+    private VerificationTokenService verificationTokenService;
     private MailSenderService mailSenderService;
 
-    public UserService(ApiUserRepository apiUserRepository,
-                       PasswordEncoder passwordEncoder,
-                       VerificationTokenRepo verificationTokenRepo, MailSenderService mailSenderService) {
+    public UserService(ApiUserRepository apiUserRepository, PasswordEncoder passwordEncoder,
+                       VerificationTokenService verificationTokenService, MailSenderService mailSenderService) {
         this.apiUserRepository = apiUserRepository;
         this.passwordEncoder = passwordEncoder;
-        this.verificationTokenRepo = verificationTokenRepo;
+        this.verificationTokenService = verificationTokenService;
         this.mailSenderService = mailSenderService;
     }
 
-//    public void addNewUser(ApiUser user, HttpServletRequest request, Role role) {
-//        VerificationToken verificationToken = new VerificationToken();
-//        switch (role) {
-//            case ADMIN:
-//                user.setRole(user.getRole();
-//                user.setPassword(passwordEncoder.encode(user.getPassword()));
-//                apiUserRepository.save(user);
-//                generateToken(user);
-//                generateUrl(user, request, verificationToken.getValue());
-//                sentMailWithToken(user, request, verificationToken.getValue());
-//                verifyToken(verificationToken.getValue(), user);
-//                sendEmailWithAdminRoleTokenToModerator(user);
-//                verifytokenAdmin(verificationToken.getValue());
-//                break;
-//            case USER:
-//                user.setRole(Role.USER);
-//                user.setPassword(passwordEncoder.encode(user.getPassword()));
-//                apiUserRepository.save(user);
-//                generateToken(user);
-//                generateUrl(user, request, verificationToken.getValue());
-//                sentMailWithToken(user, request, verificationToken.getValue());
-//                verifyToken(verificationToken.getValue(), user);
-//        }
-//    }
+    public boolean addUser(ApiUser user, HttpServletRequest request) {
 
-    public void addUser(ApiUser user, HttpServletRequest request) {
+        if (apiUserRepository.findAllByUsername(user.getUsername()) == null) {
+            boolean adminRole = false;
+            VerificationToken verificationToken = new VerificationToken();
+            String tokenForUser = generateUserToken(verificationToken);
+
+            String tokenForAdmin = UUID.randomUUID().toString();
+            if (user.getRole() == Role.ADMIN) {
+                adminRole = true;
+                verificationToken.setValueAdmin(tokenForAdmin);
+            }
+
+            setUserAtribute(user);
+
+            verificationToken.setApiUser(user);
+            verificationTokenService.saveToken(verificationToken);
+
+            String urlUser = url(request, tokenForUser, "/verify-token?token=");
+            mailSenderService.sendMail(user.getUsername(), "Verification Token", urlUser, false);
+
+            return isAdminRole(request, adminRole, tokenForAdmin);
+        }
+        return false;
+    }
+
+    private String generateUserToken(VerificationToken verificationToken) {
+        String tokenForUser = UUID.randomUUID().toString();
+        verificationToken.setValue(tokenForUser);
+        return tokenForUser;
+    }
+
+    private boolean isAdminRole(HttpServletRequest request, boolean adminRole, String tokenForAdmin) {
+        if (adminRole) {
+            String urlAdmin = url(request, tokenForAdmin, "/admin-token?token=");
+            mailSenderService.sendMail(MODERATOR, "Verification Token", urlAdmin, false);
+        }
+        return true;
+    }
+
+    private void setUserAtribute(ApiUser user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(user.getRole());
+        user.setRole(Role.USER);
+        user.setEnabled(false);
         apiUserRepository.save(user);
-        String token = UUID.randomUUID().toString();
-        generateToken(user, token);
-        if (user.getRole() == Role.USER) {
-            mailSenderService.sendMail(user.getUsername(), "Verification Token", url(token, request), false);
-            removeOldToken(token);
-        } else {
-            mailToEnableAdmin(token, request);
-            mailSenderService.sendMail(user.getUsername(), "Verification Token", adminUrl(token, request), false);
-            removeOldToken(token);
-        }
     }
 
-    private VerificationToken generateToken(ApiUser user, String token) {
-        VerificationToken verificationToken = new VerificationToken(user, token);
-        return verificationTokenRepo.save(verificationToken);
-    }
-
-    private String url(String token, HttpServletRequest request) {
+    private String url(HttpServletRequest request, String tokenForUser, String adminUserToken) {
         return "http://" + request.getServerName() + ":" +
                 request.getServerPort() +
                 request.getContextPath() +
-                "/verify-token?token=" + token;
+                adminUserToken + tokenForUser;
     }
 
-    public void verifyToken(String token) {
-        VerificationToken verificationToken = verificationTokenRepo.findByValue(token);
-        ApiUser user = verificationToken.getApiUser();
-        if (user.getRole() == Role.USER) {
+    public boolean verifyToken(String token) {
+        VerificationToken verificationToken = verificationTokenService.findByValueUser(token);
+        if (verificationToken != null) {
+            ApiUser user = verificationToken.getApiUser();
             user.setEnabled(true);
-        } else if (user.getRole() == Role.valueOf("ROLE_ADMIN")) {
-            user.setEnabled(false);
+            apiUserRepository.save(user);
+            String adminRole = verificationToken.getValueAdmin();
+            if (adminRole == null) {
+                verificationTokenService.deleteById(verificationToken.getId());
+            }
+            return true;
         }
-        apiUserRepository.save(user);
-        removeOldToken(token);
+        return false;
     }
 
-    public void isAdmin(String token) {
-        VerificationToken verificationToken = verificationTokenRepo.findByValue(token);
-        ApiUser user = verificationToken.getApiUser();
-        user.setRole(user.getRole());
-        user.setEnabled(true);
-        apiUserRepository.save(user);
-    }
-
-    private String adminUrl(String token, HttpServletRequest request) {
-        return "http://" + request.getServerName() + ":" +
-                request.getServerPort() +
-                request.getContextPath() +
-                "/admin-token?token=" + token;
-    }
-
-    private void mailToEnableAdmin(String token, HttpServletRequest request) {
-        mailSenderService.sendMail("test222test222mail@gmail.com",
-                "Admin role request", adminUrl(token, request),
-                false);
-    }
-
-    public void removeOldToken(String token ){
-        VerificationToken verificationToken = verificationTokenRepo.findByValue(token);
-        ApiUser user = verificationToken.getApiUser();
-        if(user.isEnabled() && user.getRole() == Role.USER || user.getRole() == Role.ADMIN) {
-            verificationTokenRepo.delete(verificationToken);
+    public boolean isAdmin(String token) {
+        VerificationToken verificationToken = new VerificationToken();
+        verificationToken = verificationTokenService.findByValueAdmin(token);
+        if (verificationToken != null) {
+            ApiUser user = verificationToken.getApiUser();
+            user.setRole(Role.ADMIN);
+            user.setEnabled(true);
+            apiUserRepository.save(user);
+            verificationTokenService.deleteById(verificationToken.getId());
+            return true;
         }
+        return false;
     }
 }

@@ -17,15 +17,18 @@ public class ApiUser implements UserDetails {
     private Long id;
 
     @Email
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
 
-    @Size(min=10, message = "Password has to have at least 10 chars, " +
-            "1 lowercase, 1 uppercase, and 1 number")
+    @Size(min = 10)
     private String password;
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
 
     private boolean isEnabled;
 
@@ -91,10 +94,6 @@ public class ApiUser implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
     }
 
     public boolean isEnabled() {

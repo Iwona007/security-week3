@@ -39,19 +39,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin").hasRole("ADMIN")
                 .antMatchers("/user").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/signup").permitAll()
+                .antMatchers("/").permitAll()
                 .antMatchers("/register").permitAll()
                 .and()
-                .formLogin().loginPage("/login").defaultSuccessUrl("/user").permitAll()
+                .formLogin().loginPage("/login").defaultSuccessUrl("/stranger").permitAll()
                 .and()
-                .rememberMe().tokenRepository(persistenttokenRepository())
-                .tokenValiditySeconds(86400)
+                .rememberMe().tokenValiditySeconds(1*60*60)
+                .tokenRepository(persistenttokenRepository())
 //                .rememberMeCookieName("refresh").rememberMeParameter("remember")
                 .and()
-                .logout().logoutSuccessUrl("/stranger");
+                .logout().permitAll().logoutSuccessUrl("/stranger");
     }
 
     @Bean
-    public PersistentTokenRepository persistenttokenRepository() {
+    PersistentTokenRepository persistenttokenRepository() {
         JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
         tokenRepository.setDataSource(dataSource);
         return tokenRepository;

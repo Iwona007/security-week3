@@ -9,14 +9,11 @@ public class VerificationToken {
     private Long id;
 
     private String value;
+    private String valueAdmin;
 
     @OneToOne
     private ApiUser apiUser;
 
-    public VerificationToken(ApiUser apiUser, String value) {
-        this.apiUser = apiUser;
-        this.value = value;
-    }
     public VerificationToken() {
     }
 
@@ -42,5 +39,13 @@ public class VerificationToken {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getValueAdmin() {
+        return valueAdmin;
+    }
+
+    public void setValueAdmin(String valueAdmin) {
+        this.valueAdmin = valueAdmin;
     }
 }

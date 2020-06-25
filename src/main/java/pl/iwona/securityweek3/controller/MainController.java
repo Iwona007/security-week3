@@ -3,9 +3,7 @@ package pl.iwona.securityweek3.controller;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import pl.iwona.securityweek3.configuration.WebSecurityConfig;
 import pl.iwona.securityweek3.model.ApiUser;
 import pl.iwona.securityweek3.service.UserService;
 
@@ -13,11 +11,9 @@ import pl.iwona.securityweek3.service.UserService;
 public class MainController {
 
     private UserService userService;
-    private WebSecurityConfig webSecurityConfig;
 
-    public MainController(UserService userService, WebSecurityConfig webSecurityConfig) {
+    public MainController(UserService userService) {
         this.userService = userService;
-        this.webSecurityConfig = webSecurityConfig;
     }
 
     @RequestMapping("/login")
@@ -32,20 +28,22 @@ public class MainController {
 
     @RequestMapping("/register")
     public ModelAndView register(ApiUser user, HttpServletRequest request) {
-        userService.addUser(user, request);
-        return new ModelAndView("redirect:/login");
+        if (userService.addUser(user, request)) {
+            return new ModelAndView("redirect:/login");
+        } else {
+            return new ModelAndView("registrationerror");
+        }
     }
 
     @RequestMapping("/verify-token")
-    public ModelAndView register(@RequestParam String token) {
+    public ModelAndView register(String token) {
         userService.verifyToken(token);
         return new ModelAndView("redirect:/login");
     }
 
     @RequestMapping("/admin-token")
-    public ModelAndView ifAdmin(@RequestParam String token) {
+    public ModelAndView ifAdmin(String token) {
         userService.isAdmin(token);
         return new ModelAndView("redirect:/login");
-
     }
 }

@@ -23,7 +23,7 @@ public class Start {
     public void addAdmin() {
         ApiUser moderator = new ApiUser("test222test222@gmail.com",
                 encoder.encode("admin"),
-              Role.MODERATOR, true);
+                Role.MODERATOR, true);
         apiUserRepository.save(moderator);
     }
 }

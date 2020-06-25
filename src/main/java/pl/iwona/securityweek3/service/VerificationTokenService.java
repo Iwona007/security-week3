@@ -1,6 +1,8 @@
 package pl.iwona.securityweek3.service;
 
+import java.util.Optional;
 import org.springframework.stereotype.Service;
+import pl.iwona.securityweek3.exception.TokenNotFind;
 import pl.iwona.securityweek3.model.VerificationToken;
 import pl.iwona.securityweek3.repository.VerificationTokenRepo;
 
@@ -18,14 +20,18 @@ public class VerificationTokenService {
     }
 
     public VerificationToken findByValueAdmin(String value) {
-        return verificationTokenRepo.findByValueAdmin(value);
+        return verificationTokenRepo.findByValueAdmin(value).orElseThrow(() -> new TokenNotFind(value));
     }
 
     public VerificationToken findByValueUser(String value) {
-        return verificationTokenRepo.findByValue(value);
+        return verificationTokenRepo.findByValue(value).orElseThrow(() -> new TokenNotFind(value));
     }
 
     public void deleteById(Long id) {
         verificationTokenRepo.deleteById(id);
+    }
+
+    public void delete(String token) {
+        verificationTokenRepo.deleteByValue(token);
     }
 }

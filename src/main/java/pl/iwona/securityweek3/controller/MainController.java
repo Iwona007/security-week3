@@ -27,7 +27,7 @@ public class MainController {
     }
 
     @RequestMapping("/register")
-    public ModelAndView register(ApiUser user, HttpServletRequest request) {
+    public ModelAndView register(String username, ApiUser user, HttpServletRequest request) {
         if (userService.addUser(user, request)) {
             return new ModelAndView("redirect:/login");
         } else {

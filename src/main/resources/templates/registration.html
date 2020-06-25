@@ -7,9 +7,7 @@
 <h1>Registration page</h1>
 <form th:action="@{/register}" method="post">
     <label for="username">Username</label>:
-    <input type="text" id="username" name="username" placeholder="Enter your email"
-           pattern="[^ @]*@[^ @]*"
-           title="Username cannot be different than email address"/> <br/>
+    <input type="text" id="username" name="username" pattern="[^ @]*@[^ @]*" placeholder="Enter your email"/> <br/><br>
     <label>Wybierz rolę:</label>:
 
     <select name="role">
@@ -18,13 +16,12 @@
         </option>
     </select>
     <br/>
-
-    <p>password should has at least 10 characters 1 lowercase, 1 uppercase, and 1 number</p>
+    <p>password should has at least 8 chars: 1 special char, 1 lowercase, 1 uppercase and 1 number</p>
     <label for="password">Password</label>:
     <input type="password" id="password" name="password"
-           pattern="^(?=.*\W+)(?=.*[A-Z])(?=.*[a-z](?=.*[0-9]).{10,}$"
-           title="Password has to contains at least 10 characters, 1 lowercase,
-            1 uppercase, and 1 number, and 1 special char"/> <br/>
+           pattern="^(?=.*\W)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$"
+           title="Password has to contains at least 8 chars, 1 lowercase, 1 uppercase, 1 number and 1 special char"/>
+    <br/> <br/>
 
     <input type="submit" value="Sign Up"/>
 </form>

@@ -28,7 +28,6 @@ public class UserService {
     }
 
     public boolean addUser(ApiUser user, HttpServletRequest request) {
-
         if (apiUserRepository.findAllByUsername(user.getUsername()) == null) {
             boolean adminRole = false;
             VerificationToken verificationToken = new VerificationToken();
@@ -86,6 +85,7 @@ public class UserService {
         if (verificationToken != null) {
             ApiUser user = verificationToken.getApiUser();
             user.setEnabled(true);
+            verificationTokenService.saveToken(verificationToken);
             apiUserRepository.save(user);
             String adminRole = verificationToken.getValueAdmin();
             if (adminRole == null) {
@@ -104,7 +104,7 @@ public class UserService {
             user.setRole(Role.ADMIN);
             user.setEnabled(true);
             apiUserRepository.save(user);
-            verificationTokenService.deleteById(verificationToken.getId());
+//            verificationTokenService.deleteById(verificationToken.getId());
             return true;
         }
         return false;

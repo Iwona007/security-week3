@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -42,13 +43,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers("/register").permitAll()
                 .and()
-                .formLogin().loginPage("/login").defaultSuccessUrl("/stranger").permitAll()
+                .formLogin().loginPage("/login").defaultSuccessUrl("/user").permitAll()
                 .and()
-                .rememberMe().tokenValiditySeconds(1*60*60)
+                .rememberMe().tokenValiditySeconds(1 * 60 * 60)
                 .tokenRepository(persistenttokenRepository())
-//                .rememberMeCookieName("refresh").rememberMeParameter("remember")
+                .rememberMeCookieName("refresh").rememberMeParameter("remember")
                 .and()
-                .logout().permitAll().logoutSuccessUrl("/stranger");
+                .logout().permitAll().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/stranger");
     }
 
     @Bean

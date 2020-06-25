@@ -16,7 +16,7 @@ public class PersistentLogin {
     @Column(name= "token", nullable = false)
     private String token;
 
-    @Column(name = "task_used", nullable = false)
+    @Column(name = "last_used", nullable = false)
     private LocalDate lastUsed;
 
     public PersistentLogin() {

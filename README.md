@@ -18,5 +18,5 @@ stronie bazy danych.
 
 #####
 Kindly please:
-add datasource.
-Add user and password for mail-sender.
+1: add datasource.
+2: Add user and password for mail-sender.

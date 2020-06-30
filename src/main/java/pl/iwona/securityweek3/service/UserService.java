@@ -104,7 +104,7 @@ public class UserService {
             user.setRole(Role.ADMIN);
             user.setEnabled(true);
             apiUserRepository.save(user);
-//            verificationTokenService.deleteById(verificationToken.getId());
+//            verificationTokenService.deleteById(verificationToken.getId()); // odkomentowanie powoduje wyjatek TokenNOtFound
             return true;
         }
         return false;

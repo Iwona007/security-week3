@@ -1,7 +1,7 @@
 package pl.iwona.securityweek3.exception;
 
-public class TokenNotFind extends RuntimeException {
-    public TokenNotFind(String value) {
+public class TokenNotFoundException extends RuntimeException {
+    public TokenNotFoundException(String value) {
         super(String.format("Token with value %S not exist", value));
     }
 }

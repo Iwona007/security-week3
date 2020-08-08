@@ -31,7 +31,10 @@ public class MainController {
         if (userService.addUser(user, request)) {
             return new ModelAndView("redirect:/login");
         } else {
-            return new ModelAndView("registrationerror");
+            ModelAndView modelAndView = new ModelAndView("registration", "user", user);
+            modelAndView.addObject("registerError", true);
+
+            return modelAndView;
         }
     }
 

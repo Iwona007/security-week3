@@ -19,4 +19,23 @@ stronie bazy danych.
 #####
 Kindly please:
 1: add datasource.
-2: Add user and password for mail-sender.
+2: Add user and password for gmail-sender.
+
+Technology:
+java 11,
+Spring Boot
+Spring Security,
+GUI: Thymeleaf
+SQL: MySql
+AOP: exception
+
+images for registration page:
+![img](https://github.com/Iwona007/security-week3/tree/master/src/main/resources/img/registration.PNG)
+
+images for login page:
+![img](https://github.com/Iwona007/security-week3/tree/master/src/main/resources/img/login-page.PNG)
+
+images for verification token
+![img](https://github.com/Iwona007/security-week3/tree/master/src/main/resources/img/verificationToken.PNG)
+
+server port: 8081

@@ -10,5 +10,4 @@ import pl.iwona.securityweek3.model.ApiUser;
 public interface ApiUserRepository extends JpaRepository<ApiUser, Long> {
     ApiUser findAllByUsername(String username);
 
-    Optional<ApiUser> findByUsername(String username);
 }

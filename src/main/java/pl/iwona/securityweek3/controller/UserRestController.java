@@ -9,7 +9,7 @@ public class UserRestController {
 
     @GetMapping("/admin")
     public String forAll(Principal principal) {
-        return "Hello admin" + principal.getName();
+        return "Hello admin: " + principal.getName();
     }
 
     @GetMapping("/user")

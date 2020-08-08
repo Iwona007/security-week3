@@ -30,12 +30,12 @@ SQL: MySql
 AOP: exception
 
 images for registration page:
-![img](https://github.com/Iwona007/security-week3/tree/master/src/main/resources/img/registration.PNG)
+![img](https://github.com/Iwona007/security-week3/blob/master/src/main/resources/img/registration.PNG)
 
 images for login page:
-![img](https://github.com/Iwona007/security-week3/tree/master/src/main/resources/img/login-page.PNG)
+![img](https://github.com/Iwona007/security-week3/blob/master/src/main/resources/img/login-page.PNG)
 
 images for verification token
-![img](https://github.com/Iwona007/security-week3/tree/master/src/main/resources/img/verificationToken.PNG)
+![img](https://github.com/Iwona007/security-week3/blob/master/src/main/resources/img/verificationToken.PNG)
 
 server port: 8081
